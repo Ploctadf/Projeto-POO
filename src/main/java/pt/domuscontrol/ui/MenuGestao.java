@@ -392,7 +392,7 @@ public class MenuGestao {
                     novoModelo.isBlank() ? null : novoModelo,
                     novoConsumo);
             ConsoleUtils.imprimirSucesso("Dispositivo actualizado.");
-        } catch (DomusException | IllegalArgumentException | NumberFormatException e) {
+        } catch (DomusException | IllegalArgumentException e) {
             ConsoleUtils.imprimirErro(e.getMessage());
         }
         ConsoleUtils.pausar();
