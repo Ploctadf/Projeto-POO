@@ -1,7 +1,7 @@
 package pt.domuscontrol.model.automation;
 
+import pt.domuscontrol.model.common.SistemaContext;
 import pt.domuscontrol.model.device.Dispositivo;
-import pt.domuscontrol.persistence.BaseDados;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -23,9 +23,9 @@ public class AcaoDesligar implements Acao {
     }
 
     @Override
-    public void executar(BaseDados bd) {
-        LocalDateTime agora = bd.getRelogio().getDataHoraAtual();
-        encontrarDispositivo(bd).ifPresent(d -> d.desligar(agora));
+    public void executar(SistemaContext ctx) {
+        LocalDateTime agora = ctx.getRelogio().getDataHoraAtual();
+        encontrarDispositivo(ctx).ifPresent(d -> d.desligar(agora));
     }
 
     @Override
@@ -33,8 +33,8 @@ public class AcaoDesligar implements Acao {
         return "DESLIGAR dispositivo " + dispositivoId;
     }
 
-    private Optional<Dispositivo> encontrarDispositivo(BaseDados bd) {
-        return bd.getCasas().stream()
+    private Optional<Dispositivo> encontrarDispositivo(SistemaContext ctx) {
+        return ctx.getCasas().stream()
                 .filter(c -> c.getId().equals(casaId))
                 .flatMap(c -> c.getDivisoes().stream())
                 .filter(div -> div.getId().equals(divisaoId))

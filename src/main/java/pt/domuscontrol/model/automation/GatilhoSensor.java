@@ -2,9 +2,9 @@ package pt.domuscontrol.model.automation;
 
 import java.util.Optional;
 
+import pt.domuscontrol.model.common.SistemaContext;
 import pt.domuscontrol.model.device.Dispositivo;
 import pt.domuscontrol.model.device.Sensor;
-import pt.domuscontrol.persistence.BaseDados;
 
 /**
  * Gatilho que dispara quando o valor de um sensor ultrapassa (ou fica abaixo de) um limiar.
@@ -35,8 +35,8 @@ public class GatilhoSensor implements Gatilho {
     }
 
     @Override
-    public boolean avaliar(BaseDados bd) {
-        Optional<Dispositivo> d = bd.getCasas().stream()
+    public boolean avaliar(SistemaContext ctx) {
+        Optional<Dispositivo> d = ctx.getCasas().stream()
                 .filter(c -> c.getId().equals(casaId))
                 .flatMap(c -> c.getDivisoes().stream())
                 .filter(div -> div.getId().equals(divisaoId))

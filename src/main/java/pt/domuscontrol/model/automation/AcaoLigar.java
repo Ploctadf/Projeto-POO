@@ -3,8 +3,8 @@ package pt.domuscontrol.model.automation;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import pt.domuscontrol.model.common.SistemaContext;
 import pt.domuscontrol.model.device.Dispositivo;
-import pt.domuscontrol.persistence.BaseDados;
 
 /**
  * Ação que liga um dispositivo específico.
@@ -23,9 +23,9 @@ public class AcaoLigar implements Acao {
     }
 
     @Override
-    public void executar(BaseDados bd) {
-        LocalDateTime agora = bd.getRelogio().getDataHoraAtual();
-        encontrarDispositivo(bd).ifPresent(d -> d.ligar(agora));
+    public void executar(SistemaContext ctx) {
+        LocalDateTime agora = ctx.getRelogio().getDataHoraAtual();
+        encontrarDispositivo(ctx).ifPresent(d -> d.ligar(agora));
     }
 
     @Override
@@ -33,8 +33,8 @@ public class AcaoLigar implements Acao {
         return "LIGAR dispositivo " + dispositivoId;
     }
 
-    private Optional<Dispositivo> encontrarDispositivo(BaseDados bd) {
-        return bd.getCasas().stream()
+    private Optional<Dispositivo> encontrarDispositivo(SistemaContext ctx) {
+        return ctx.getCasas().stream()
                 .filter(c -> c.getId().equals(casaId))
                 .flatMap(c -> c.getDivisoes().stream())
                 .filter(div -> div.getId().equals(divisaoId))

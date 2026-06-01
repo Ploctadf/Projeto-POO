@@ -8,11 +8,12 @@ import java.util.List;
 import pt.domuscontrol.model.automation.Automacao;
 import pt.domuscontrol.model.automation.Escalonamento;
 import pt.domuscontrol.model.common.Relogio;
+import pt.domuscontrol.model.common.SistemaContext;
 import pt.domuscontrol.model.house.Casa;
 import pt.domuscontrol.model.user.RegistoInteracao;
 import pt.domuscontrol.model.user.Utilizador;
 
-public class BaseDados implements Serializable {
+public class BaseDados implements Serializable, SistemaContext {
     private static final long serialVersionUID = 1L;
 
     private final List<Utilizador> utilizadores;

@@ -1,6 +1,6 @@
 package pt.domuscontrol.model.automation;
 
-import pt.domuscontrol.persistence.BaseDados;
+import pt.domuscontrol.model.common.SistemaContext;
 
 import java.io.Serializable;
 
@@ -9,6 +9,6 @@ import java.io.Serializable;
  * Implementada por: AcaoLigar, AcaoDesligar, AcaoAjustarIntensidade, etc.
  */
 public interface Acao extends Serializable {
-    void executar(BaseDados bd);
+    void executar(SistemaContext ctx);
     String descricao();
 }

@@ -1,0 +1,8 @@
+target/
+*.class
+*.jar
+*.dat
+.idea/
+*.iml
+.claude/
+pom.xml

@@ -1,6 +1,6 @@
 package pt.domuscontrol.model.automation;
  
-import pt.domuscontrol.persistence.BaseDados;
+import pt.domuscontrol.model.common.SistemaContext;
  
 import java.io.Serializable;
  
@@ -40,10 +40,10 @@ public class Automacao implements Serializable {
      * Avalia o gatilho e, se disparar, executa a ação.
      * @return true se a ação foi executada
      */
-    public boolean avaliarEExecutar(BaseDados bd) {
+    public boolean avaliarEExecutar(SistemaContext ctx) {
         if (!ativa) return false;
-        if (gatilho.avaliar(bd)) {
-            acao.executar(bd);
+        if (gatilho.avaliar(ctx)) {
+            acao.executar(ctx);
             return true;
         }
         return false;

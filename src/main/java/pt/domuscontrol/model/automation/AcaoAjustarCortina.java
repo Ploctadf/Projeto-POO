@@ -1,8 +1,8 @@
 package pt.domuscontrol.model.automation;
 
+import pt.domuscontrol.model.common.SistemaContext;
 import pt.domuscontrol.model.device.Cortina;
 import pt.domuscontrol.model.device.Dispositivo;
-import pt.domuscontrol.persistence.BaseDados;
 
 import java.util.Optional;
 
@@ -27,8 +27,8 @@ public class AcaoAjustarCortina implements Acao {
     }
 
     @Override
-    public void executar(BaseDados bd) {
-        encontrarDispositivo(bd).ifPresent(d -> {
+    public void executar(SistemaContext ctx) {
+        encontrarDispositivo(ctx).ifPresent(d -> {
             if (d instanceof Cortina c) c.setPercentagemAbertura(percentagem);
         });
     }
@@ -38,8 +38,8 @@ public class AcaoAjustarCortina implements Acao {
         return "AJUSTAR cortina " + dispositivoId + " para " + percentagem + "%";
     }
 
-    private Optional<Dispositivo> encontrarDispositivo(BaseDados bd) {
-        return bd.getCasas().stream()
+    private Optional<Dispositivo> encontrarDispositivo(SistemaContext ctx) {
+        return ctx.getCasas().stream()
                 .filter(c -> c.getId().equals(casaId))
                 .flatMap(c -> c.getDivisoes().stream())
                 .filter(div -> div.getId().equals(divisaoId))

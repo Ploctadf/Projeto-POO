@@ -1,6 +1,6 @@
 package pt.domuscontrol.model.automation;
 
-import pt.domuscontrol.persistence.BaseDados;
+import pt.domuscontrol.model.common.SistemaContext;
 
 import java.io.Serializable;
 
@@ -9,6 +9,6 @@ import java.io.Serializable;
  * Implementada por: GatilhoSensor, GatilhoHorario, GatilhoEstado, etc.
  */
 public interface Gatilho extends Serializable {
-    boolean avaliar(BaseDados bd);
+    boolean avaliar(SistemaContext ctx);
     String descricao();
 }

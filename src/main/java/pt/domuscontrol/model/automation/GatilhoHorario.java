@@ -2,7 +2,7 @@ package pt.domuscontrol.model.automation;
 
 import java.time.LocalTime;
 
-import pt.domuscontrol.persistence.BaseDados;
+import pt.domuscontrol.model.common.SistemaContext;
 
 /**
  * Gatilho que dispara quando a hora atual do relógio simulado corresponde
@@ -20,8 +20,8 @@ public class GatilhoHorario implements Gatilho {
     }
 
     @Override
-    public boolean avaliar(BaseDados bd) {
-        LocalTime agora = bd.getRelogio().getDataHoraAtual().toLocalTime();
+    public boolean avaliar(SistemaContext ctx) {
+        LocalTime agora = ctx.getRelogio().getDataHoraAtual().toLocalTime();
         return agora.getHour() == horario.getHour()
                 && agora.getMinute() == horario.getMinute();
     }

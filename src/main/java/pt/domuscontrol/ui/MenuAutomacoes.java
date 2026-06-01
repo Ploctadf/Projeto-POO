@@ -5,6 +5,8 @@ import pt.domuscontrol.model.house.Casa;
 import pt.domuscontrol.persistence.BaseDados;
 import pt.domuscontrol.service.AutomacaoService;
 import pt.domuscontrol.service.CasaService;
+import pt.domuscontrol.service.CenarioService;
+import pt.domuscontrol.service.SugestaoService;
 
 import java.util.List;
 
@@ -16,11 +18,15 @@ public class MenuAutomacoes {
     private final AutomacaoService automacaoService;
     private final CasaService casaService;
     private final BaseDados bd;
+    private final CenarioService cenarioService;
+    private final SugestaoService sugestaoService;
 
-    public MenuAutomacoes(AutomacaoService automacaoService, CasaService casaService, BaseDados bd) {
+    public MenuAutomacoes(AutomacaoService automacaoService, CasaService casaService, BaseDados bd, CenarioService cenarioService, SugestaoService sugestaoService) {
         this.automacaoService = automacaoService;
         this.casaService = casaService;
         this.bd = bd;
+        this.cenarioService = cenarioService;
+        this.sugestaoService = sugestaoService;
     }
 
     public void mostrar() {
@@ -40,6 +46,9 @@ public class MenuAutomacoes {
             System.out.println("  9. Verificar escalonamentos agora");
             System.out.println("  10. Ativar / desativar escalonamento");
             System.out.println("  11. Remover escalonamento");
+            System.out.println("  --- Cenários ---");
+            System.out.println("  12. Executar cenário");
+            System.out.println("  13. Ver sugestões automáticas");
             System.out.println("  0. Voltar");
             opcao = ConsoleUtils.lerOpcao("\n  Opção: ");
             switch (opcao) {
@@ -54,6 +63,8 @@ public class MenuAutomacoes {
                 case 9  -> verificarEscalonamentos();
                 case 10 -> toggleEscalonamento();
                 case 11 -> removerEscalonamento();
+                case 12 -> executarCenario();
+                case 13 -> mostrarSugestoes();
                 case 0  -> {}
                 default -> ConsoleUtils.imprimirErro("Opção inválida.");
             }
@@ -277,5 +288,42 @@ public class MenuAutomacoes {
             }
             default -> throw new IllegalArgumentException("Tipo de ação inválido");
         };
+    }
+
+    private void executarCenario() {
+
+        ConsoleUtils.imprimirTitulo("EXECUTAR CENÁRIO");
+
+        cenarioService.listarCenarios()
+                .forEach(c -> System.out.println("  - " + c.getNome()));
+
+        String nome = ConsoleUtils.lerTexto("  Nome do cenário: ");
+
+        if (cenarioService.executarCenario(nome)) {
+            ConsoleUtils.imprimirSucesso("Cenário executado.");
+        } else {
+            ConsoleUtils.imprimirErro("Cenário não encontrado.");
+        }
+
+        ConsoleUtils.pausar();
+    }
+
+    private void mostrarSugestoes() {
+
+        ConsoleUtils.imprimirTitulo("SUGESTÕES AUTOMÁTICAS");
+
+        List<String> sugestoes = sugestaoService.gerarSugestoes();
+
+        if (sugestoes.isEmpty()) {
+
+            System.out.println("  Sem sugestões disponíveis.");
+        }
+        else {
+
+            sugestoes.forEach(s ->
+                    System.out.println("  ✓ " + s));
+        }
+
+        ConsoleUtils.pausar();
     }
 }

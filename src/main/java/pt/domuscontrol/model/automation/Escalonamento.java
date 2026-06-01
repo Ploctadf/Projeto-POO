@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import pt.domuscontrol.persistence.BaseDados;
+import pt.domuscontrol.model.common.SistemaContext;
 
 /**
  * Um escalonamento dispara uma Acao todos os dias a uma hora específica.
@@ -46,19 +46,19 @@ public class Escalonamento implements Serializable {
      * Verifica se é a hora de executar e, se for, executa a ação.
      * @return true se a ação foi executada agora
      */
-    public boolean verificarEExecutar(BaseDados bd) {
+    public boolean verificarEExecutar(SistemaContext ctx) {
         if (!ativo) return false;
 
-        LocalDateTime agora = bd.getRelogio().getDataHoraAtual();
+        LocalDateTime agora = ctx.getRelogio().getDataHoraAtual();
         LocalTime horaAtual = agora.toLocalTime();
         LocalDate diaAtual  = agora.toLocalDate();
 
-        boolean horaCorreta = horaAtual.getHour()   == horario.getHour()
-                           && horaAtual.getMinute()  == horario.getMinute();
+        // Dispara se a hora atual já passou (ou é igual) à hora definida, e ainda não executou hoje
+        boolean horaAtingida = !horaAtual.isBefore(horario);
         boolean naoExecutouHoje = ultimaExecucao == null || !ultimaExecucao.equals(diaAtual);
 
-        if (horaCorreta && naoExecutouHoje) {
-            acao.executar(bd);
+        if (horaAtingida && naoExecutouHoje) {
+            acao.executar(ctx);
             ultimaExecucao = diaAtual;
             return true;
         }

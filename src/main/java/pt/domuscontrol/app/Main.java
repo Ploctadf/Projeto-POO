@@ -10,6 +10,8 @@ import pt.domuscontrol.service.AutomacaoService;
 import pt.domuscontrol.service.CasaService;
 import pt.domuscontrol.service.DispositivoService;
 import pt.domuscontrol.service.EstatisticaService;
+import pt.domuscontrol.service.CenarioService;
+import pt.domuscontrol.service.SugestaoService;
 import pt.domuscontrol.ui.ConsoleUtils;
 import pt.domuscontrol.ui.MenuAutomacoes;
 import pt.domuscontrol.ui.MenuEstatisticas;
@@ -29,6 +31,8 @@ public class Main {
         DispositivoService dispService    = new DispositivoService(bd, casaService);
         EstatisticaService estatService   = new EstatisticaService(bd);
         AutomacaoService automacaoService = new AutomacaoService(bd);
+        CenarioService cenarioService = new CenarioService(bd);
+        SugestaoService sugestaoService = new SugestaoService(bd);
 
         // TODO: autenticação por menu
         String utilizadorAtualId = bd.getUtilizadores().isEmpty()
@@ -40,7 +44,7 @@ public class Main {
 
         MenuGestao       menuGestao       = new MenuGestao(casaService, dispService, utilizadorAtualId);
         MenuEstatisticas menuEstatisticas = new MenuEstatisticas(estatService);
-        MenuAutomacoes   menuAutomacoes   = new MenuAutomacoes(automacaoService, casaService, bd);
+        MenuAutomacoes   menuAutomacoes   = new MenuAutomacoes(automacaoService, casaService, bd, cenarioService, sugestaoService);
 
         int opcao;
         do {
@@ -111,7 +115,7 @@ public class Main {
         // Verificar escalonamentos automaticamente após avançar o tempo
         List<String> disparados = automacaoService.verificarEscalonamentos();
         if (!disparados.isEmpty()) {
-            System.out.println("\n  ⏰ Escalonamentos disparados:");
+            System.out.println("\nEscalonamentos disparados:");
             disparados.forEach(n -> System.out.println("     ✓ " + n));
         }
         ConsoleUtils.pausar();
